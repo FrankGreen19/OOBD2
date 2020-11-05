@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<shop>
+    <products>
+        <product>
+            <productBrand>SomeBrand</productBrand>
+            <productPrice>500.0</productPrice>
+            <productType>Cake</productType>
+        </product>
+        <product>
+            <productBrand>SomeBrand</productBrand>
+            <productPrice>500000.0</productPrice>
+            <productType>Car</productType>
+        </product>
+        <product>
+            <productBrand>SomeBrand</productBrand>
+            <productPrice>600.0</productPrice>
+            <productType>Ball</productType>
+        </product>
+    </products>
+</shop>
