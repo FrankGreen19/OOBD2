@@ -3,10 +3,7 @@ package Homeworks.Lab1;
 import org.postgresql.util.PGobject;
 import org.postgresql.util.PGtokenizer;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.util.List;
 
 @Entity
@@ -14,10 +11,14 @@ import java.util.List;
 public class Client extends Person {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
     @Column
     private int discount;
+
+    @OneToMany
+    private List<Order> orderList;
 
     public Client(String email, String password, String phoneNumber, String firstName, String lastName) {
         super(email, password, phoneNumber, firstName, lastName);

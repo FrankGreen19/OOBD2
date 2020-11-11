@@ -4,10 +4,7 @@ import Homeworks.Lab4.DatabaseHandler;
 import Homeworks.Lab5.Lab5ProductService;
 import org.postgresql.util.PGtokenizer;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
+import javax.persistence.*;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.text.ParseException;
@@ -16,9 +13,11 @@ import java.util.Date;
 import java.util.List;
 
 @Entity
+@Table(name = "order")
 public class Order implements Comparable{
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
     @Column
@@ -28,13 +27,13 @@ public class Order implements Comparable{
     private Date orderDate;
 
     @Column
-    private int clientID;
+    private Long clientID;
 
     @Column
-    @OneToMany()
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Product> productList;
 
-    public Order(double orderPrice, Date orderDate, int clientID, List<Product> productList) {
+    public Order(double orderPrice, Date orderDate, long clientID, List<Product> productList) {
         this.orderPrice = orderPrice;
         this.orderDate = orderDate;
         this.clientID = clientID;
@@ -59,11 +58,19 @@ public class Order implements Comparable{
         this.orderDate = orderDate;
     }
 
-    public int getClientID() {
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    public Long getClientID() {
         return clientID;
     }
 
-    public void setClientID(int clientID) {
+    public void setClientID(Long clientID) {
         this.clientID = clientID;
     }
 
@@ -109,7 +116,7 @@ public class Order implements Comparable{
         PGtokenizer t = new PGtokenizer(s, ',');
         this.orderPrice = Double.parseDouble(t.getToken(0));
         this.orderDate = new SimpleDateFormat("dd-MM-yyyy").parse(t.getToken(1));
-        this.clientID = Integer.parseInt(t.getToken(2));
+        this.clientID = Long.parseLong(t.getToken(2));
 //        java.sql.Array sqlArray = connection.createArrayOf("product", new String[]{t.getToken(3)});
 //        Object array = sqlArray.getArray();
 //        System.out.println(array.toString());

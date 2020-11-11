@@ -3,7 +3,7 @@ package Homeworks.Lab4;
 import java.sql.*;
 
 public class DatabaseHandler {
-    static final String DB_URL = "jdbc:postgresql://127.0.0.1:5432/oodb";
+    static final String DB_URL = "jdbc:postgresql://127.0.0.1:5432/oodbr";
     static final String USER = "postgres";
     static final String PASS = "root";
 

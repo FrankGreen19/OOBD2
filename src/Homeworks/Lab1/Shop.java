@@ -1,15 +1,18 @@
 package Homeworks.Lab1;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.OneToMany;
+import javax.persistence.*;
 import javax.xml.bind.annotation.*;
 import java.util.List;
 
 @XmlType(name = "shop")
 @XmlRootElement(name = "shop")
 @Entity
+@Table(name = "shop")
 public class Shop {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
     @Column
     private String name;
@@ -19,15 +22,15 @@ public class Shop {
     private List<Order> orders;
 
     @Column
-    @OneToMany(targetEntity = Client.class)
+    @OneToMany()
     private List<Client> clients;
 
     @Column
-    @OneToMany(targetEntity = Worker.class)
+    @OneToMany()
     private List<Worker> workers;
 
     @Column
-    @OneToMany(targetEntity = Product.class)
+    @OneToMany()
     private List<Product> products;
 
     public Shop(String name) {

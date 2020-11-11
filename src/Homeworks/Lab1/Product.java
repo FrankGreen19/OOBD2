@@ -3,9 +3,7 @@ package Homeworks.Lab1;
 import org.postgresql.util.PGobject;
 import org.postgresql.util.PGtokenizer;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import javax.persistence.*;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -13,9 +11,11 @@ import javax.xml.bind.annotation.XmlType;
 import java.sql.SQLException;
 
 @Entity
+@Table(name = "product")
 public class Product extends PGobject implements Comparable {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
     @Column

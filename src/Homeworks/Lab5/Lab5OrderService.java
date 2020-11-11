@@ -18,7 +18,7 @@ public class Lab5OrderService {
                         "(ROW(cast(? as double precision ), cast(? as date ), cast(? as integer ), cast(? as product[])))");
         statement.setDouble(1, order.getOrderPrice());
         statement.setString(2, String.valueOf(order.getOrderDate()));
-        statement.setInt(3, order.getClientID());
+        statement.setLong(3, order.getClientID());
 
         StringBuilder s= new StringBuilder("{\"");
         for (Product product: order.getProductList()) {

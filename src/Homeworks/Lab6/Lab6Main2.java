@@ -24,7 +24,7 @@ public class Lab6Main2 {
     // Пакет в котором расположены классы-сущности
     public static String PATH_FOR_SCAN = "Homeworks.Lab1";
 
-    public static void main(String[] args) {
+    public static GraphModel getGraph() {
 
         GraphModel graph = new GraphModel();
         ArrayList<EntityNode> entityNodesList = new ArrayList<>();
@@ -47,7 +47,7 @@ public class Lab6Main2 {
                 entityAttribute.setAttributeName(field.getName());
                 entityAttribute.setAttributeType("Field");
 
-//                entityNode.setEntityAttribute(entityAttribute);
+                entityNode.setEntityAttribute(entityAttribute);
 
                 Annotation[] fannotations = field.getAnnotations();
                 for (Annotation a : fannotations) {
@@ -57,7 +57,6 @@ public class Lab6Main2 {
 
                         Edge edge = new Edge();
                         edge.setNodeSource(entityNode);
-                        System.out.println(className);
                         edge.setNodeTarget(className);
                         edge.setRelationType(RelationType.OneToMany);
 
@@ -81,8 +80,9 @@ public class Lab6Main2 {
         graph.setEntityNodeList(entityNodesList);
         graph.setEdges(edgesList);
 
-        Lab6XMLService.makeGraph(graph);
+//        Lab6XMLService.makeGraph(graph);
 
+        return graph;
     }
 
     private static boolean classIsEntity(Class<?> c) {
