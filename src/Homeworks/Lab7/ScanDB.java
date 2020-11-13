@@ -11,10 +11,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
+import java.util.*;
 
 public class ScanDB {
 
@@ -25,64 +22,55 @@ public class ScanDB {
         HashMap<String, HashSet<String>> tables = new HashMap<>();
         GraphModel graphModel = Lab6Main2.getGraph();
 
-        try(Connection connection = getConnection()) {
+        try(Connection connection = DatabaseHandler.getDbConnection()) {
 
-            System.out.println("***** База данных *****");
             List<String> tbls = getTables(connection);
-            System.out.println("\nКоличество таблиц: " + tbls.size());
-            System.out.println("\nСписок таблиц:\n");
-            tbls.forEach(System.out::println);
-            System.out.println();
+
             for (String table : tbls) {
-                System.out.println("Список полей таблицы "+table+":");
                 List<String> fields = getFields(connection, table);
 
                 HashSet<String> hashSetFields = new HashSet<>();
                 fields.forEach(f->{
-                    System.out.println(f);
                     hashSetFields.add(f);
                 });
 
                 tables.put(table, hashSetFields);
             }
 
-            System.out.println("\n***** Сущности *****");
-            System.out.println("\nКоличество сущностей: " + graphModel.getEntityNodeList().size());
-            System.out.println("\nСписок сущностей:\n");
-            for (EntityNode entityNode : graphModel.getEntityNodeList()) {
-                System.out.println(entityNode.getEntityName());
-            }
-            for (EntityNode entityNode : graphModel.getEntityNodeList()) {
-                System.out.println("Поля сущности: " + entityNode.getEntityName() + "\n");
-                for (EntityAttribute entityAttribute : entityNode.getAtributes()) {
-                    System.out.println(entityAttribute.getAttributeName());
-                }
-                System.out.println();
-            }
+            for (Map.Entry<String, HashSet<String>> item : tables.entrySet()) {
 
-
-            for (String table : tbls) {
                 for (EntityNode entityNode : graphModel.getEntityNodeList()) {
+
                     String[] fieldToString = entityNode.getEntityName().split("\\.");
                     String className = fieldToString[2].toLowerCase();
 
-                    if (table.equals(className)) {
-                        System.out.println(table + " -> " + className);
+                    if (item.getKey().equals(className)) {
+                        System.out.println("\nТаблица " + item.getKey() + " -> Класс " + className + "\n");
+
+                        int classFieldNum = entityNode.getAtributes().size();
+                        int counter = 0;
+
+                        for (EntityAttribute field : entityNode.getAtributes()) {
+                            if (item.getValue().contains(field.getAttributeName().toLowerCase())) {
+                                counter++;
+                                System.out.println(field.getAttributeName() + " ✓");
+                            } else
+                                System.out.println(field.getAttributeName() + " ✗");
+                        }
+
+                        if (counter != classFieldNum) {
+                            System.out.println("\nПроцент совпадений: " + (100 * counter)/classFieldNum + "%");
+                        } else
+                            System.out.println("\nПроцент совпадений: 100%");
                     }
                 }
             }
 
-
         } catch (SQLException e) {
-            e.printStackTrace();
-        } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
     }
 
-    public static Connection getConnection() throws SQLException, ClassNotFoundException {
-        return DatabaseHandler.getDbConnection();
-    }
 
     public static List<String> getTables(Connection connection) throws SQLException {
 

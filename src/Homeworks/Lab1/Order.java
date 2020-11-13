@@ -29,7 +29,6 @@ public class Order implements Comparable{
     @Column
     private Long clientID;
 
-    @Column
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Product> productList;
 

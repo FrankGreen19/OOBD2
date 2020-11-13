@@ -3,7 +3,10 @@ package Homeworks.Lab1;
 import org.postgresql.util.PGobject;
 import org.postgresql.util.PGtokenizer;
 
+
 import javax.persistence.*;
+import javax.persistence.Id;
+import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -59,6 +62,14 @@ public class Product extends PGobject implements Comparable {
 
     public void setProductPrice(double productPrice) {
         this.productPrice = productPrice;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    public long getId() {
+        return id;
     }
 
     @Override
