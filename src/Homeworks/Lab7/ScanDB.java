@@ -17,7 +17,7 @@ public class ScanDB {
 
     private static Connection connection;
 
-    public static void main(String[] args) {
+    public static HashMap<String, HashSet<String>> getDbData() {
         // Структура для хранения имен таблиц и полей (в HashSet)
         HashMap<String, HashSet<String>> tables = new HashMap<>();
         GraphModel graphModel = Lab6Main2.getGraph();
@@ -37,40 +37,45 @@ public class ScanDB {
                 tables.put(table, hashSetFields);
             }
 
-            for (Map.Entry<String, HashSet<String>> item : tables.entrySet()) {
 
-                for (EntityNode entityNode : graphModel.getEntityNodeList()) {
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
 
-                    String[] fieldToString = entityNode.getEntityName().split("\\.");
-                    String className = fieldToString[2].toLowerCase();
+        return tables;
+    }
 
-                    if (item.getKey().equals(className)) {
+    public static boolean scanDb(HashMap<String, HashSet<String>> tables, GraphModel graphModel) {
+        for (Map.Entry<String, HashSet<String>> item : tables.entrySet()) {
+
+            for (EntityNode entityNode : graphModel.getEntityNodeList()) {
+
+                String[] fieldToString = entityNode.getEntityName().split("\\.");
+                String className = fieldToString[2].toLowerCase();
+
+                if (item.getKey().equals(className)) {
                         System.out.println("\nТаблица " + item.getKey() + " -> Класс " + className + "\n");
 
-                        int classFieldNum = entityNode.getAtributes().size();
-                        int counter = 0;
+                    int classFieldNum = entityNode.getAtributes().size();
+                    int counter = 0;
 
-                        for (EntityAttribute field : entityNode.getAtributes()) {
-                            if (item.getValue().contains(field.getAttributeName().toLowerCase())) {
-                                counter++;
+                    for (EntityAttribute field : entityNode.getAtributes()) {
+                        if (item.getValue().contains(field.getAttributeName().toLowerCase())) {
+                            counter++;
                                 System.out.println(field.getAttributeName() + " ✓");
-                            } else
-                                System.out.println(field.getAttributeName() + " ✗");
                         }
+                    }
 
                         if (counter != classFieldNum) {
                             System.out.println("\nПроцент совпадений: " + (100 * counter)/classFieldNum + "%");
                         } else
                             System.out.println("\nПроцент совпадений: 100%");
-                    }
                 }
             }
-
-        } catch (SQLException e) {
-            e.printStackTrace();
         }
-    }
 
+        return true;
+    }
 
     public static List<String> getTables(Connection connection) throws SQLException {
 

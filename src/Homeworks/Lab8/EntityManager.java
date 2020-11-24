@@ -1,5 +1,9 @@
 package Homeworks.Lab8;
 
+import Homeworks.Lab8.domain.BaseEntity;
+
+import java.sql.SQLException;
+
 public interface EntityManager {
 
     /**
@@ -10,12 +14,12 @@ public interface EntityManager {
     /**
      * Метод обновляет в БД данные, соответствующие объекту
      */
-    <T> T merge(T var1);
+    BaseEntity merge(BaseEntity var1) throws Exception;
 
     /**
      * Метод удаляет объект из БД
      */
-    void remove(Object var1);
+    void remove(BaseEntity var1) throws Exception;
 
     /**
      * Метод запрашивает из базы данных информацию, соответствующую первичному ключу var2.
@@ -24,7 +28,7 @@ public interface EntityManager {
      * @param var1 - тип создаваемого объекта
      * @param var2 - значение первичного ключа
      */
-    <T> T find(Class<T> var1, Object var2);
+    <T> T find(Class<T> var1, BaseEntity var2) throws Exception;
 
     void refresh(Object var1);
 }
